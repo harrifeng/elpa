@@ -1,2 +1,0 @@
-;;; Generated package description from git-gutter.el  -*- no-byte-compile: t -*-
-(define-package "git-gutter" "20220423.1704" "Port of Sublime Text plugin GitGutter" '((emacs "25.1")) :commit "b43b81e9f4bd559ed02bdbcaeae7431e2d49ed09" :authors '(("Syohei YOSHIDA" . "syohex@gmail.com")) :maintainer '("Neil Okamoto" . "neil.okamoto+melpa@gmail.com") :url "https://github.com/emacsorphanage/git-gutter")
