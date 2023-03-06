@@ -1,4 +1,4 @@
-;;; load-theme-buffer-local-autoloads.el --- automatically extracted autoloads
+;;; load-theme-buffer-local-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -15,7 +15,7 @@ Load an Emacs24 THEME only in BUFFER.
 
 \(fn THEME &optional BUFFER NO-CONFIRM NO-ENABLE)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "load-theme-buffer-local" '("custom-theme-buffer-local-")))
+(register-definition-prefixes "load-theme-buffer-local" '("custom-theme-buffer-local-"))
 
 ;;;***
 

@@ -1,2 +1,0 @@
-# elpa
-Elpa config snapshot

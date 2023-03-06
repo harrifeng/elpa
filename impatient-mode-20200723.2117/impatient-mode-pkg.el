@@ -2,7 +2,7 @@
   '((emacs "24.3")
     (simple-httpd "1.5.0")
     (htmlize "1.40"))
-  :commit "479a2412596ff1dbdddeb7bdbba45482ce5b230c" :authors
+  :commit "cbddfd54242210df3e1c3b590fada5bb5423f5ed" :authors
   '(("Brian Taylor" . "el.wubo@gmail.com"))
   :maintainer
   '("Brian Taylor" . "el.wubo@gmail.com")
