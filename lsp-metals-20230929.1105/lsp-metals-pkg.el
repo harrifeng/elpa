@@ -1,4 +1,4 @@
-(define-package "lsp-metals" "20230817.827" "Scala Client settings"
+(define-package "lsp-metals" "20230929.1105" "Scala Client settings"
   '((emacs "27.1")
     (scala-mode "1.1")
     (lsp-mode "7.0")
@@ -7,9 +7,9 @@
     (dash "2.18.0")
     (f "0.20.0")
     (ht "2.0")
-    (treemacs "2.5")
+    (treemacs "3.1")
     (posframe "1.4.1"))
-  :commit "811f02e4416d208102350ea48404e0310ffea647" :authors
+  :commit "f17a62c7d6ab3eb833550612db30b15733f83ec1" :authors
   '(("Ross A. Baker" . "ross@rossabaker.com")
     ("Evgeny Kurnevsky" . "kurnevsky@gmail.com"))
   :maintainers

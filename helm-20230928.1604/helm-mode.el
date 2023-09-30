@@ -282,6 +282,12 @@ Not guaranteed to work with Emacs < 27."
     map)
   "Keymap for `helm-comp-read'.")
 
+(defvar helm-comp-in-region-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map helm-comp-read-map)
+    map)
+  "Keymap for completion-at-point and friends.")
+
 (defun helm-mode-delete-char-backward-1 ()
   (interactive)
   (condition-case err
@@ -359,8 +365,8 @@ NOT `setq'."
   :set (lambda (var val)
          (set var val)
          (if (memq val '(helm helm-fuzzy))
-             (define-key helm-comp-read-map (kbd "DEL") 'helm-mode-delete-char-backward-maybe)
-           (define-key helm-comp-read-map (kbd "DEL") 'delete-backward-char))))
+             (define-key helm-comp-in-region-map (kbd "DEL") 'helm-mode-delete-char-backward-maybe)
+           (define-key helm-comp-in-region-map (kbd "DEL") 'delete-backward-char))))
 
 (defconst helm-completion--all-styles
   (let ((flex (if (assq 'flex completion-styles-alist)
@@ -1145,7 +1151,7 @@ is used."
                          (helm-in-buffer-get-longest-candidate)))
            (sep (if (or (null max-len) (zerop max-len))
                     " --"               ; Default separator.
-                  (make-string (1+ (- max-len (length comp))) ? )))
+                  (helm-in-buffer-make-separator comp max-len)))
            (doc (ignore-errors
                   (helm-get-first-line-documentation sym)))
            (symbol-class (help--symbol-class sym))
@@ -1193,9 +1199,7 @@ is used."
            (desc (if built-in
                      (aref (assoc-default sym package--builtins) 2)
                    (and id (package-desc-summary id))))
-           (sep (make-string (1+ (- (helm-in-buffer-get-longest-candidate)
-                                    (length comp)))
-                             ? )))
+           (sep (helm-in-buffer-make-separator comp)))
       (list comp
             (propertize
              (if status
@@ -1210,9 +1214,7 @@ is used."
 (defun helm-completion-theme-affixation (_completions)
   (lambda (comp)
     (let* ((sym (intern-soft comp))
-           (sep (make-string (1+ (- (helm-in-buffer-get-longest-candidate)
-                                    (length comp)))
-                             ? ))
+           (sep (helm-in-buffer-make-separator comp))
            (doc (if (custom-theme-p sym)
                     (helm-get-first-line-documentation sym)
                   (helm--get-theme-doc-1 sym))))
@@ -1257,9 +1259,7 @@ is used."
     (let ((doc (with-output-to-string
                  (with-current-buffer standard-output
                    (print-coding-system-briefly (intern comp) 'tightly))))
-          (sep (make-string (1+ (- (helm-in-buffer-get-longest-candidate)
-                                   (length comp)))
-                            ? )))
+          (sep (helm-in-buffer-make-separator comp)))
       (list comp "" (helm-aand (replace-regexp-in-string "^ *" "" doc)
                                (replace-regexp-in-string "[\n]" "" it)
                                (propertize it 'face 'helm-completions-detailed)
@@ -1267,9 +1267,7 @@ is used."
 
 (defun helm-completion-color-affixation (_comps)
   (lambda (comp)
-    (let ((sep (make-string (1+ (- (helm-in-buffer-get-longest-candidate)
-                                   (length comp)))
-                            ? ))
+    (let ((sep (helm-in-buffer-make-separator comp))
           (rgb (condition-case nil
                    (helm-acase comp
                      ("foreground at point" (with-helm-current-buffer
@@ -1293,9 +1291,7 @@ is used."
     ;; behavior of find-library-include-other-files remove them for the benefit
     ;; of everybody.
     (unless (string-match "\\(\\.elc\\|/\\)\\'" comp)
-      (let* ((sep (make-string (1+ (- (helm-in-buffer-get-longest-candidate)
-                                      (length comp)))
-                               ? ))
+      (let* ((sep (helm-in-buffer-make-separator comp))
              (path (or (assoc-default comp helm--locate-library-cache)
                        (let ((p (find-library-name comp)))
                          (push (cons comp p) helm--locate-library-cache)
@@ -2587,6 +2583,7 @@ Can be used for `completion-in-region-function' by advicing it with an
                             :match-dynamic (eq helm-completion-style 'emacs)
                             :fuzzy (eq helm-completion-style 'helm-fuzzy)
                             :exec-when-only-one t
+                            :keymap helm-comp-in-region-map
                             :quit-when-no-cand
                             (lambda ()
                               ;; Delay message to overwrite "Quit".

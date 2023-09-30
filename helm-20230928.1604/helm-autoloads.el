@@ -260,9 +260,9 @@ Cleanup `image-dired-dir' directory.
 Delete all thumb files that are no more associated with an existing
 image file in `helm-ff-image-dired-thumbnails-cache'." t)
 (autoload 'helm-projects-history "helm-files" "\
+Jump to project already visisted with `helm-browse-project'.
 
-
-(fn ARG)" t)
+(fn &optional ARG)" t)
 (autoload 'helm-browse-project "helm-files" "\
 Preconfigured helm to browse projects.
 Browse files and see status of project with its VCS.

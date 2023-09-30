@@ -427,6 +427,7 @@ i.e. the loop is not entered after running COMMAND."
     (define-key map (kbd "M-(")        #'helm-prev-visible-mark)
     (define-key map (kbd "M-)")        #'helm-next-visible-mark)
     (define-key map (kbd "C-k")        #'helm-delete-minibuffer-contents)
+    (define-key map (kbd "DEL")        #'helm-delete-char-backward)
     (define-key map (kbd "C-x C-f")    #'helm-quit-and-find-file)
     (define-key map (kbd "M-m")        #'helm-toggle-all-marks)
     (define-key map (kbd "M-a")        #'helm-mark-all)
@@ -4014,15 +4015,28 @@ Update is reenabled when idle 1s."
   (with-helm-alive-p
     (unless helm--suspend-update-interactive-flag
       (helm-suspend-update 1))
-    (delete-char (- arg))
+    (helm-delete-char-backward arg)
     (run-with-idle-timer
      1 nil
      (lambda ()
        (unless helm--suspend-update-interactive-flag
          (helm-suspend-update -1)
          (helm-check-minibuffer-input)
-         (helm-force-update))))))
+         ;; Already done by helm-delete-char-backward.
+         (unless (string= (minibuffer-contents) "")
+           (helm-force-update)))))))
 (put 'helm-delete-backward-no-update 'helm-only t)
+
+(defun helm-delete-char-backward (arg)
+  "Delete char backward and update when reaching prompt."
+  (interactive "p")
+  (condition-case _err
+      (delete-char (- arg))
+    (buffer-read-only
+     (progn
+       (helm-update)
+       (helm-reset-yank-point)))))
+(put 'helm-delete-char-backward 'helm-only t)
 
 (defun helm--suspend-read-passwd (old--fn &rest args)
   "Suspend Helm while reading password.
@@ -6884,6 +6898,17 @@ It is useful to align extra informations after candidates in `helm-buffer'.")
        'helm-candidate-buffer-longest-len
        (get-buffer it))
     0))
+
+(defun helm-in-buffer-make-separator (cand &optional longest)
+  "Create a separator to align candidates in `helm-source-in-buffer'.
+Longest candidate should have been modified at initialization of
+source, otherwise LONGEST can be used to specify longest candidate."
+  (let ((lgst (or longest (helm-in-buffer-get-longest-candidate)))
+        (len  (length cand)))
+    (make-string (1+ (if (> lgst len)
+                         (- lgst (length cand))
+                       0))
+                 ? )))
 
 (defun helm-init-candidates-in-buffer (buffer-spec data &optional force-longest)
   "Register BUFFER-SPEC with DATA for a helm candidates-in-buffer session.
