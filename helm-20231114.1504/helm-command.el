@@ -23,7 +23,7 @@
 (require 'helm-mode)
 (require 'helm-elisp)
 
-
+
 (defvar helm-M-x-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map helm-comp-read-map)
@@ -32,7 +32,7 @@
     (define-key map (kbd "C-]") #'helm-M-x-toggle-short-doc)
     map))
 
-
+
 (defgroup helm-command nil
   "Emacs command related Applications and libraries for Helm."
   :group 'helm)
@@ -55,7 +55,7 @@ This value can be toggled with
 \\<helm-M-x-map>\\[helm-M-x-toggle-short-doc] while in helm-M-x session."
   :type 'boolean)
 
-
+
 ;;; Faces
 ;;
 ;;
@@ -80,13 +80,13 @@ This value can be toggled with
     '((t :box (:line-width -1) :foreground "DimGray"))
     "Face used by `helm-M-x' for short docstring."
   :group 'helm-command-faces)
-
+
 (defvar helm-M-x-input-history nil)
 (defvar helm-M-x-prefix-argument nil
   "Prefix argument before calling `helm-M-x'.")
 (defvar helm-M-x--timer nil)
 (defvar helm-M-x--unwind-forms-done nil)
-
+
 (defun helm-M-x-get-major-mode-command-alist (mode-map)
   "Return alist of MODE-MAP."
   (when mode-map
