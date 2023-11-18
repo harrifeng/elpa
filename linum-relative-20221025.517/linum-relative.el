@@ -4,8 +4,6 @@
 ;;
 ;; Author: coldnew <coldnew.tw@gmail.com>
 ;; Keywords: converience
-;; Package-Version: 20221025.517
-;; Package-Commit: 8fbe89ad897921849665a3e8da18cee7d0721441
 ;; X-URL: http://github.com/coldnew/linum-relative
 ;; URL: http://github.com/coldnew/linum-relative
 ;; Version: 0.6
