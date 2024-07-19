@@ -651,8 +651,8 @@ imobj 组合构成在一起，构成了 imobjs 这个概念。比如：
 (defun pyim-process--merge-candidates (new-candidates old-candidates)
   "将 OLD-CANDIDATES 和 NEW-CANDIDATES 合并的默认策略。"
   (remove nil (delete-dups
-               `(,(car old-candidates)
-                 ,@new-candidates
+               `(,@new-candidates
+                 ,(car old-candidates)
                  ,@(cdr old-candidates)))))
 
 (defun pyim-process--handle-candidates-async ()
