@@ -28,8 +28,6 @@ evaluate `go-playground-mode'.
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
 
-\\{go-playground-mode-map}
-
 (fn &optional ARG)" t)
 (autoload 'go-playground "go-playground" "\
 Run playground for Go language in a new buffer." t)

@@ -61,8 +61,6 @@ evaluate `mc-hide-unmatched-lines-mode'.
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
 
-\\{hum/hide-unmatched-lines-mode-map}
-
 (fn &optional ARG)" t)
 (register-definition-prefixes "mc-hide-unmatched-lines-mode" '("hum/"))
 
@@ -289,8 +287,6 @@ evaluate `multiple-cursors-mode'.
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
 
-\\{mc/keymap}
-
 (fn &optional ARG)" t)
 (register-definition-prefixes "multiple-cursors-core" '("deactivate-cursor-after-undo" "mc--" "mc/" "unsupported-cmd"))
 
@@ -320,8 +316,6 @@ evaluate `rectangular-region-mode'.
 
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
-
-\\{rectangular-region-mode-map}
 
 (fn &optional ARG)" t)
 (register-definition-prefixes "rectangular-region-mode" '("rectangular-region-mode" "rrm/"))
