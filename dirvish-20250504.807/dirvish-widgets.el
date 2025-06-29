@@ -44,6 +44,10 @@
 This value is passed to function `format-time-string'."
   :group 'dirvish :type 'string)
 
+(defcustom dirvish-file-count-overflow 15000
+  "Up limit for counting directory files, to improve performance."
+  :group 'dirvish :type 'natnum)
+
 (defcustom dirvish-path-separators '("  ⌂" "  ∀" " ⋗ ")
   "Separators in path mode line segment.
 The value is a list with 3 elements:
@@ -186,21 +190,23 @@ Audio;(Audio-codec . \"\"%CodecID%\"\")(Audio-bitrate . \"\"%BitRate/String%\"\"
 
 ;;;; Helpers
 
-(defun dirvish--attr-size-human-readable (file-size)
-  "Produce a string showing FILE-SIZE in human-readable form."
-  (let ((power 1024.0)
-        (prefixes '("" "k" "M" "G" "T" "P" "E" "Z" "Y")))
-    (while (and (>= file-size power) (cdr prefixes))
-      (setq file-size (/ file-size power)
-            prefixes (cdr prefixes)))
-    (substring (format (if (and (< file-size 10)
-                                (>= (mod file-size 1.0) 0.05)
-                                (< (mod file-size 1.0) 0.95))
-                           "      %.1f%s%s"
-                         "      %.0f%s%s")
-                       file-size (car prefixes)
-                       (if (dirvish-prop :gui) " " ""))
-               -6)))
+(defun dirvish--attr-size-human-readable (file-size kilo)
+  "Produce a string showing FILE-SIZE in human-readable form.
+KILO is 1024.0 / 1000 for file size / counts respectively."
+  (if (and (eq kilo 1000) (> file-size (- dirvish-file-count-overflow 3)))
+      " MANY "
+    (let ((prefixes '("" "k" "M" "G" "T" "P" "E" "Z" "Y")))
+      (while (and (>= file-size kilo) (cdr prefixes))
+        (setq file-size (/ file-size kilo)
+              prefixes (cdr prefixes)))
+      (substring (format (if (and (< file-size 10)
+                                  (>= (mod file-size 1.0) 0.05)
+                                  (< (mod file-size 1.0) 0.95))
+                             "      %.1f%s%s"
+                           "      %.0f%s%s")
+                         file-size (car prefixes)
+                         (if (dirvish-prop :gui) " " ""))
+                 -6))))
 
 (defun dirvish--file-attr-size (name attrs)
   "Get file size of file NAME from ATTRS."
@@ -210,27 +216,29 @@ Audio;(Audio-codec . \"\"%CodecID%\"\")(Audio-bitrate . \"\"%BitRate/String%\"\"
                             (if (dirvish-prop :gui) " " ""))
                     -6))
         ((stringp (file-attribute-type attrs))
-         (let ((ct (dirvish-attribute-cache name :f-count
-                     (condition-case nil
-                         (let ((files (directory-files name nil nil t)))
-                           (dirvish--attr-size-human-readable
-                            (- (length files) 2)))
-                       (file-error 'file)))))
+         (let* ((ovfl dirvish-file-count-overflow)
+                (ct (dirvish-attribute-cache name :f-count
+                      (condition-case nil
+                          (let ((files (directory-files name nil nil t ovfl)))
+                            (dirvish--attr-size-human-readable
+                             (- (length files) 2) 1000))
+                        (file-error 'file)))))
            (if (not (eq ct 'file)) ct
              (dirvish-attribute-cache name :f-size
                (dirvish--attr-size-human-readable
-                 (file-attribute-size (file-attributes name)))))))
+                (file-attribute-size (file-attributes name)) 1024.0)))))
         ((file-attribute-type attrs)
-         (let ((ct (dirvish-attribute-cache name :f-count
+         (let* ((ovfl dirvish-file-count-overflow)
+                (ct (dirvish-attribute-cache name :f-count
                      (condition-case nil
-                         (let ((files (directory-files name nil nil t)))
+                         (let ((files (directory-files name nil nil t ovfl)))
                            (dirvish--attr-size-human-readable
-                            (- (length files) 2)))
+                            (- (length files) 2) 1000))
                        (file-error 'no-permission)))))
            (if (eq ct 'no-permission) " ---- " ct)))
         (t (dirvish-attribute-cache name :f-size
              (dirvish--attr-size-human-readable
-              (or (file-attribute-size attrs) 0))))))
+              (or (file-attribute-size attrs) 0) 1024.0)))))
 
 (defun dirvish--file-attr-time (name attrs)
   "File NAME's modified time from ATTRS."
@@ -425,14 +433,19 @@ GROUP-TITLES is a list of group titles."
             (propertize truename 'face 'dired-symlink))))
 
 (dirvish-define-mode-line index
-  "Current file's index and total files count."
-  (let ((cur-pos (format "%3d " (- (line-number-at-pos (point)) 1)))
-        (fin-pos (format "/%3d " (- (line-number-at-pos (point-max)) 2))))
+  "Cursor file's index and total files count within current subdir."
+  (let* ((count (if (cdr dired-subdir-alist)
+                    (format "[ %s subdirs ] " (length dired-subdir-alist)) ""))
+         (smin (line-number-at-pos (dired-subdir-min)))
+         (cpos (- (line-number-at-pos (point)) smin))
+         (fpos (- (line-number-at-pos (dired-subdir-max)) smin 1))
+         (cur (format "%3d " cpos)) (end (format "/%3d " fpos)))
     (if (dirvish--selected-p)
-        (put-text-property 0 (length fin-pos) 'face 'bold fin-pos)
-      (put-text-property 0 (length cur-pos) 'face 'dirvish-inactive cur-pos)
-      (put-text-property 0 (length fin-pos) 'face 'dirvish-inactive fin-pos))
-    (format "%s%s" cur-pos fin-pos)))
+        (put-text-property 0 (length end) 'face 'bold end)
+      (put-text-property 0 (length count) 'face 'dirvish-inactive count)
+      (put-text-property 0 (length cur) 'face 'dirvish-inactive cur)
+      (put-text-property 0 (length end) 'face 'dirvish-inactive end))
+    (format "%s%s%s" cur end count)))
 
 (dirvish-define-mode-line free-space
   "Amount of free space on `default-directory''s file system."
