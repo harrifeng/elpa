@@ -6,7 +6,8 @@
 ;; Keywords: converience
 ;; X-URL: http://github.com/coldnew/linum-relative
 ;; URL: http://github.com/coldnew/linum-relative
-;; Version: 0.6
+;; Package-Version: 20221025.517
+;; Package-Revision: 8fbe89ad8979
 
 ;; This file is not part of GNU Emacs.
 

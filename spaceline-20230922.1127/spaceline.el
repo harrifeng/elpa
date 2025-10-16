@@ -4,7 +4,8 @@
 ;;
 ;; Author: Eivind Fonn <evfonn@gmail.com>
 ;; URL: https://github.com/TheBB/spaceline
-;; Version: 2.0.1
+;; Package-Version: 20230922.1127
+;; Package-Revision: 086420d16e52
 ;; Keywords: mode-line powerline spacemacs
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (powerline "2.3") (dash "2.11.0") (s "1.10.0"))
 

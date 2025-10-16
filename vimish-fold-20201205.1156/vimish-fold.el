@@ -6,7 +6,8 @@
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; Author: Magnar Sveen <magnars@gmail.com>
 ;; URL: https://github.com/mrkkrp/vimish-fold
-;; Version: 0.3.0
+;; Package-Version: 20201205.1156
+;; Package-Revision: a6501cbfe3db
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (f "0.18.0"))
 ;; Keywords: convenience
 ;;

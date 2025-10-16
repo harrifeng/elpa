@@ -3,7 +3,8 @@
 ;; Copyright (C) 2012-2024  Takeshi Arabiki
 
 ;; Author: Takeshi Arabiki
-;; Version: 0.2.5
+;; Package-Version: 20240218.2357
+;; Package-Revision: 77a864ca72a6
 
 ;;  This program is free software: you can redistribute it and/or modify
 ;;  it under the terms of the GNU General Public License as published by

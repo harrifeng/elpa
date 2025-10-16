@@ -4,7 +4,8 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/pythonic
-;; Version: 0.2
+;; Package-Version: 20230821.1733
+;; Package-Revision: f6e0bec55231
 ;; Package-Requires: ((emacs "25.1") (s "1.9") (f "0.17.2"))
 ;; Keywords: convenience pythonic
 

@@ -3,7 +3,8 @@
 ;; This is free and unencumbered software released into the public domain.
 
 ;; Author: Brian Taylor <el.wubo@gmail.com>
-;; Version: 1.1
+;; Package-Version: 20230511.1746
+;; Package-Revision: a4e4e1285284
 ;; URL: https://github.com/netguy204/imp.el
 ;; Package-Requires: ((emacs "24.3") (simple-httpd "1.5.0") (htmlize "1.40"))
 

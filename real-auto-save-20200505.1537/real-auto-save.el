@@ -4,7 +4,8 @@
 
 ;; Author: Chaoji Li <lichaoji AT gmail DOT com>
 ;;         Anand Reddy Pandikunta <anand21nanda AT gmail DOT com>
-;; Version: 0.4
+;; Package-Version: 20200505.1537
+;; Package-Revision: 8e51241e5ba7
 ;; Date: January 27, 2015
 ;; URL: https://github.com/ChillarAnand/real-auto-save
 ;; Package-Requires: ((emacs "24.4"))

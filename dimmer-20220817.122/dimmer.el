@@ -4,7 +4,8 @@
 
 ;; Filename: dimmer.el
 ;; Author: Neil Okamoto
-;; Version: 0.4.2
+;; Package-Version: 20220817.122
+;; Package-Revision: a5b697580e5a
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/gonewest818/dimmer.el
 ;; Keywords: faces, editing
