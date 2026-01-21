@@ -1,5 +1,5 @@
 ;; -*- no-byte-compile: t; lexical-binding: nil -*-
-(define-package "ein" "20250307.1731"
+(define-package "ein" "20251212.1623"
   "Jupyter notebook client."
   '((emacs       "26.1")
     (websocket   "1.12")
@@ -10,6 +10,6 @@
     (dash        "2.13.0")
     (with-editor "0pre"))
   :url "https://github.com/dickmao/emacs-ipython-notebook"
-  :commit "271136654631d42105164163fff3d8ceec4c5e40"
-  :revdesc "271136654631"
+  :commit "8fa836fcd1c22f45d36249b09590b32a890f2b9e"
+  :revdesc "8fa836fcd1c2"
   :keywords '("jupyter" "literate programming" "reproducible research"))
